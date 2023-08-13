@@ -8,6 +8,7 @@
 
 #define BUFFER_SIZE 1024
 
+/* Signal handler for SIGINT (Ctrl+C) */
 void sig_handler(int signo) {
     (void)signo;
     write(STDOUT_FILENO, "\n($) ", 5);
@@ -21,8 +22,7 @@ int main(void) {
     signal(SIGINT, sig_handler);
 
     while (1) {
-
-	pid_t pid;
+        pid_t pid;
         pid = fork();
 
         if (isatty(STDIN_FILENO))
@@ -50,8 +50,8 @@ int main(void) {
 
         if (pid == 0) {
             char *args[] = {NULL};
-            char *env[] = {NULL}; 
-      
+            char *env[] = {NULL};
+
             if (execve(line, args, env) == -1) {
                 perror("execve");
                 exit(EXIT_FAILURE);

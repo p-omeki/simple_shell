@@ -9,12 +9,14 @@
 
 extern char **environ;
 
+/* Signal handler for SIGINT (Ctrl+C) */
 void sig_handler(int signo) {
     (void)signo;
     write(STDOUT_FILENO, "\n($) ", 5);
     fflush(stdout);
 }
 
+/* Function to print the current environment */
 void print_environment(void) {
     char **env = environ;
     while (*env) {
@@ -63,7 +65,7 @@ int main(void) {
 
             if (strcmp(command, "env") == 0) {
                 print_environment();
-                continue; 
+                continue; /* Continue to the next iteration of the loop */ 
             }
 
             path_token = strtok(path, ":");

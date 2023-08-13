@@ -9,7 +9,6 @@
 
 extern char **environ;
 
-/* Signal handler for SIGINT (Ctrl+C) */
 void sig_handler(int signo) {
     (void)signo;
     write(STDOUT_FILENO, "\n($) ", 5);

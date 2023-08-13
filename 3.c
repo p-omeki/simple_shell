@@ -16,20 +16,16 @@ void sig_handler(int signo) {
 }
 
 int main(void) {
-    int command_found = 0;
-/*    char *command = args[0];*/
-    char *path = getenv("PATH");
-    char *path_token = strtok(path, ":");
-    int argc = 0;
-    char input[BUFFER_SIZE];
-    pid_t pid;
-    pid = fork();
     signal(SIGINT, sig_handler);
 
     while (1) {
-        char *token = strtok(input, " ");
-   /*     char input[BUFFER_SIZE];*/
+        char input[BUFFER_SIZE];
         char *args[BUFFER_SIZE / 2];
+        char *token;
+        int argc = 0;
+        pid_t pid;
+        char *path = getenv("PATH");
+        char *path_token;
 
         if (isatty(STDIN_FILENO))
             write(STDOUT_FILENO, "($) ", 5);
@@ -42,6 +38,7 @@ int main(void) {
 
         input[strlen(input) - 1] = '\0';
 
+        token = strtok(input, " ");
 
         while (token != NULL) {
             args[argc++] = token;
@@ -51,19 +48,20 @@ int main(void) {
 
         if (argc > 0) {
             char *command = args[0];
-   
-	while (path_token != NULL) {
-            char executable_path[BUFFER_SIZE];
-            snprintf(executable_path, sizeof(executable_path), "%s/%s", path_token, command);
-            if (access(executable_path, X_OK) == 0) {
-                command_found = 1;
-                break;
-            }
-            path_token = strtok(NULL, ":");
-        }
 
-        if (command_found) {
-   
+            path_token = strtok(path, ":");
+
+            while (path_token != NULL) {
+                char executable_path[BUFFER_SIZE];
+                snprintf(executable_path, sizeof(executable_path), "%s/%s", path_token, command);
+                if (access(executable_path, X_OK) == 0) {
+                    break;
+                }
+                path_token = strtok(NULL, ":");
+            }
+
+            pid = fork();
+
             if (pid == -1) {
                 perror("fork");
                 exit(EXIT_FAILURE);
@@ -77,12 +75,9 @@ int main(void) {
             } else {
                 wait(NULL);
             }
-        } else {
-            fprintf(stderr, "Command not found: %s\n", command);
         }
     }
 
-    exit(EXIT_SUCCESS);
     return 0;
 }
 

@@ -38,7 +38,7 @@ void print_environment(void) {
 int main(void) {
     signal(SIGINT, sig_handler);
 
-
+    while (1) {
         char input[BUFFER_SIZE];
         char *args[BUFFER_SIZE / 2];
         char *token;
@@ -46,12 +46,12 @@ int main(void) {
         pid_t pid;
         char *path = getenv("PATH");
         char *path_token;
+        ssize_t read_size;
 
         if (isatty(STDIN_FILENO))
             write(STDOUT_FILENO, "($) ", 5);
 
-        /*  Custom getline function */
-       ssize_t read_size = read(STDIN_FILENO, input, BUFFER_SIZE); 
+        read_size = read(STDIN_FILENO, input, BUFFER_SIZE);
         if (read_size <= 0) {
             if (isatty(STDIN_FILENO))
                 write(STDOUT_FILENO, "\n", 1);

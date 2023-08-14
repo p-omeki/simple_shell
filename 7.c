@@ -43,7 +43,6 @@ int main(void) {
         char *args[BUFFER_SIZE / 2];
         char *args_ptr = args[0];
         char *token = input;
-   /*     char *end = input + read_size - 1; */
 	char *end;
 	ssize_t read_size;
         int argc = 0;
@@ -64,10 +63,6 @@ int main(void) {
         input[read_size - 1] = '\0';
 
         end = input + read_size - 1;  
-    /*  char *args[BUFFER_SIZE / 2];
-        char *args_ptr = args[0];
-        char *token = input;
-        char *end = input + read_size - 1;*/
 
         while (*token == ' ')
             token++;

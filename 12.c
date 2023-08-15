@@ -63,23 +63,20 @@ void execute_command(char **args, int logical_operator, int *status) {
  * Return: Always 0.
  */
 int main(void) {
-    char *end = input + read_size - 1;	
+    ssize_t read_size;
+    char input[BUFFER_SIZE];
+    char *args[BUFFER_SIZE / 2];
+    char *args_ptr;
+    char *token = input;
+    int argc = 0;
+    int logical_operator = 0;
+    int status = 0;
+    char *end;
+    int i;
+
     signal(SIGINT, sig_handler);
-/*    ssize_t read_size; */
- /*   int status = 0; */
 
     while (1) {
-        char input[BUFFER_SIZE];
-        int status = 0;
-       	int logical_operator = 0;
-        ssize_t read_size;
-	int i;
-	char *args[BUFFER_SIZE / 2];
-        char *args_ptr = args[0];
-        char *token = input;
-        int argc = 0;
-        char *path = getenv("PATH");
-
         if (isatty(STDIN_FILENO))
             write(STDOUT_FILENO, "($) ", 5);
 
@@ -90,8 +87,9 @@ int main(void) {
             break;
         }
         input[read_size - 1] = '\0';
+        end = input + read_size - 1;
 
-  /*      char *end = input + read_size - 1; */
+        args_ptr = args[0];  /* Initialize args_ptr */
 
         while (*token == ' ')
             token++;
@@ -124,12 +122,6 @@ int main(void) {
                 continue;
             }
 
-            /* Handle other built-in commands as before */
-
-      /*      int logical_operator = 0;  0: None, 1: &&, 2: || */
-
-            /* Check for logical operators */
-     /*         int i; */
             for (i = 0; args[i] != NULL; i++) {
                 if (strcmp(args[i], "&&") == 0) {
                     logical_operator = 1;
@@ -144,10 +136,8 @@ int main(void) {
 
             if (logical_operator) {
                 if (status == 0 && logical_operator == 2) {
-                    /* Skip execution due to "||" */
                     continue;
                 } else if (status != 0 && logical_operator == 1) {
-                    /* Skip execution due to "&&" */
                     continue;
                 }
             }

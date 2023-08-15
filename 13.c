@@ -17,14 +17,14 @@ int num_aliases = 0;
  * @value: The value of the alias.
  */
 void add_alias(const char *name, const char *value) {
-       int i;
-       for (i = 0; i < num_aliases; i++) {
-            if (strcmp(aliases[i].name, name) == 0) {
+    int i;
+    for (i = 0; i < num_aliases; i++) {
+        if (strcmp(aliases[i].name, name) == 0) {
             strcpy(aliases[i].value, value);
             return;
         }
     }
-    
+
     if (num_aliases < MAX_ALIASES) {
         strcpy(aliases[num_aliases].name, name);
         strcpy(aliases[num_aliases].value, value);
@@ -38,12 +38,12 @@ void add_alias(const char *name, const char *value) {
  */
 void print_aliases(const char *name) {
     if (name == NULL) {
-	int i;    
+        int i;
         for (i = 0; i < num_aliases; i++) {
             printf("%s='%s'\n", aliases[i].name, aliases[i].value);
         }
     } else {
-	int i;    
+        int i;
         for (i = 0; i < num_aliases; i++) {
             if (strcmp(aliases[i].name, name) == 0) {
                 printf("%s='%s'\n", aliases[i].name, aliases[i].value);
@@ -58,6 +58,9 @@ int main() {
     
     while (1) {
         /* Read user input */
+        char input[100]; 
+        fgets(input, sizeof(input), stdin);
+        input[strcspn(input, "\n")] = '\0'; 
         
         if (strcmp(input, "alias") == 0) {
             print_aliases(NULL);

@@ -34,12 +34,13 @@ const char *get_variable_value(const char *variable) {
 int main(void) {
     char input[BUFFER_SIZE];
     char output[BUFFER_SIZE];
+    ssize_t read_size;
 
     while (1) {
         if (isatty(STDIN_FILENO))
             write(STDOUT_FILENO, "($) ", 5);
 
-        ssize_t read_size = read(STDIN_FILENO, input, BUFFER_SIZE);
+        read_size = read(STDIN_FILENO, input, BUFFER_SIZE);
         if (read_size <= 0) {
             if (isatty(STDIN_FILENO))
                 write(STDOUT_FILENO, "\n", 1);

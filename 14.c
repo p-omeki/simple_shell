@@ -34,6 +34,11 @@ const char *get_variable_value(const char *variable) {
 int main(void) {
     char input[BUFFER_SIZE];
     char output[BUFFER_SIZE];
+    const char *input_ptr;
+    char *output_ptr; 
+    int i = 0;
+     char variable[64];
+    const char *value;
     ssize_t read_size;
 
     while (1) {
@@ -48,14 +53,13 @@ int main(void) {
         }
         input[read_size - 1] = '\0';
 
-        char *output_ptr = output;
-        const char *input_ptr = input;
-        char variable[64]; /* Max variable length */
-
+        output_ptr = output;
+        input_ptr = input;
+  
         while (*input_ptr != '\0') {
             if (*input_ptr == '$') {
                 input_ptr++; /* Skip the '$' */
-                int i = 0;
+                i = 0;
                 while ((*input_ptr >= 'a' && *input_ptr <= 'z') ||
                        (*input_ptr >= 'A' && *input_ptr <= 'Z') ||
                        (*input_ptr >= '0' && *input_ptr <= '9') ||
@@ -65,7 +69,7 @@ int main(void) {
                     i++;
                 }
                 variable[i] = '\0';
-                const char *value = get_variable_value(variable);
+                value = get_variable_value(variable);
                 strcpy(output_ptr, value);
                 output_ptr += strlen(value);
             } else {

@@ -17,6 +17,8 @@ extern char **environ;
 const char *get_variable_value(const char *variable) {
     /* ... (same implementation as before) */
     (void)variable; /* To suppress unused parameter warning */
+
+    return NULL;
 }
 
 /**
